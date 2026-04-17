@@ -1,14 +1,61 @@
 @import url('https://fonts.googleapis.com/css2?family=Caprasimo&family=Roboto+Slab:wght@400;700&display=swap');
 
+@media screen and (min-width: 1300px){
+  #game-config{
+    width: 40vw;
+  }
+}
+
 * {
   box-sizing: border-box;
+}
+
+:root {
+  --color-bg-main: #0a0a0a;
+  --color-bg-card: #121212;
+  --color-bg-secondary: #1a1a1a;
+
+  --color-primary: #99ff00;
+  --color-primary-hover: #c6ff66;
+
+  --color-text: #e6ffe6;
+  --color-text-muted: #6b7280;
+
+  --color-danger: #ff3b3b;
+
+  --shadow-default: 0 0 10px rgba(153, 255, 0, 0.2);
+}
+
+[data-theme="american"] {
+
+  --color-bg-main: #0b1220;
+  --color-bg-card: #121a2b;
+  --color-bg-secondary: #1c2740;
+
+ 
+  --color-primary: #1e3a8a;
+  --color-primary-hover: #3b82f6;
+
+  --color-danger: #dc2626;
+  --color-accent: #ef4444;
+
+  --color-text: #f8fafc;
+  --color-text-muted: #94a3b8;
+
+  --shadow-default: 0 0 12px rgba(59, 130, 246, 0.3);
+}
+
+
+
+h2, p{
+  margin: 0;
 }
 
 html {
   font-family: 'Roboto Slab', sans-serif;
   line-height: 1.5;
 
-  color: #ebe7ef;
+  color: var(--color-text);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -18,11 +65,7 @@ html {
 }
 
 body {
-  background: radial-gradient(
-      circle at top,
-      rgba(11, 5, 17, 0.98),
-      rgba(88, 71, 39, 0.87)
-    );
+  background: var(--color-bg-main);
   background-repeat: repeat;
   background-size: 100% 100%, 30% 30%, 100% 100%;
   min-height: 110rem;
@@ -36,31 +79,54 @@ header {
   padding: 1rem;
 }
 
+header img{
+  width: 80px;
+  height: 130px;
+}
+
 header h1 {
   font-family: 'Caprasimo', cursive;
-  font-size: 3rem;
-  color: #f0e9e0;
+  font-size: 4rem;
+  color: var(--color-text);
 }
 
 #game-config {
   display: flex;
   align-items: center;
+  justify-content: space-around;
   width: 60vw;
-  height: 400px;
+  height: 500px;
   margin: 1rem auto;
   padding: 1rem;
   border-radius: 8px;
-  box-shadow: 2px 4px 8px black;
-  background-color: rgba(14, 13, 9, 0.658);
+  box-shadow: var(--shadow-default);
+  background-color: var(--color-bg-card);
+  transition: all 0.5s ease;
+}
+
+#game-config:has(.avatar:hover){
+  transform: scale(.8);
+  animation: pulse 1s infinite;
+}
+
+#game-config:has(.avatar:hover) .config-options {
+  filter: blur(2px);
+  transform: scale(0.95);
 }
 
 #game-config .avatar{
   width: 180px;
   height: 320px;
-  background-image: url('forca_img_6.PNG');
+  background-image: url('images/forca_img_6.PNG');
   background-size: cover;
+  transition: all 0.8s ease;
+  transform-origin: center;
 }
 
+#game-config .avatar:hover{
+  transform: scale(2.2) translateZ(100px);
+  animation: fadeToGray 2s forwards
+}
 
 #game-config .config-options {
   display: flex;
@@ -69,15 +135,15 @@ header h1 {
   margin-top: 1rem;
 }
 
-#game-config .welcome h2 {
+.welcome h2 {
   margin: 0;
   font-size: 2.5rem;
   font-weight: 700;
-  color: #d6953f;
+  color: var(--color-primary);
   text-align: center;
 }
 
-#game-config .welcome p {
+.welcome p {
   margin: 0 0 1rem 0;
   font-size: 1.2rem;
   color: #f0e9e0;
@@ -85,7 +151,7 @@ header h1 {
 }
 
 
-#game-config .config-options .option{
+.config-options .option{
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -94,73 +160,79 @@ header h1 {
   padding: .4rem;
 }
 
-#game-config .config-options .option label{
+.config-options .option label{
   font-size: 1.1rem;
+  font-weight: 800;
   padding: .5rem 1rem;
   border-radius: 5px;
   margin-bottom: .3rem;
 }
 
-#game-config .config-options .option input{
-  width: 200px;
+.config-options .option input{
+  width: 220px;
   height: 30px;
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 4px;
   background: #585858d3;
+  color: var(--color-text);
+  font-weight: 800;
 }
 
-#game-config .config-options .option select {
-  width: 200px;
+.config-options .option select {
+  width: 220px;
   height: 30px;
   border: none;
   border-radius: 4px;
   background: #585858d3;
+  color: var(--color-text);
+  font-weight: 800;
 }
 
-#game-config .config-options button{
+.config-options button{
   display: block;
   margin: 1.3rem auto;
   width: 100px;
   height: 30px;
-  border: 1px solid #d6953f;
+  border: 1px solid var(--color-primary);
   font-size: 1.1rem;
   background: none;
-  color: #d6953f;
+  color: var(--color-primary);
   border-radius: 5px;
 }
 
-#game-config .config-options button:hover{
-  background-color: #d8a665;
+.config-options button:hover{
+  background-color: var(--color-primary-hover);
   color: #000000;
   font-weight: bold;
   transform: scale(1.1);
   transition-duration: .6s;
-  box-shadow: 1px 1px 5px #85663ebd;
+  box-shadow: var(--shadow-default);
 }
 
 #game-board {
+  position: relative;
   display: flex;
   gap: 2rem;
   width: 80vw;
   height: 500px;
   margin: 1rem auto;
   border-radius: 8px;
-  box-shadow: 2px 4px 8px black;
-  background-color: rgba(14, 13, 9, 0.658);
+  box-shadow: var(--shadow-default);
+  background-color: var(--color-bg-card);
 }
 
-#game-board #drawn-block{
+#drawn-block{
   width: 300px;
   height: 500px;
 }
 
-#game-board #drawn-block img{
+#drawn-block img{
   width: 300px;
   height: 500px;
 }
 
-#game-board #guess-block {
+#guess-block {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -169,7 +241,58 @@ header h1 {
   width: 100%;
 }
 
-#game-board #guess-block #word-space {
+#guess-block menu{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding:0 1rem;
+  margin: 0;
+}
+
+#failed-panel{
+  padding: 1rem;
+  font-weight: 800;
+  background:  var(--color-bg-secondary);
+  color: var(--color-danger);
+  border-radius: 5px;
+}
+
+#failed-panel .attempts{
+  font-size: 1.5rem;
+  color: var(--color-danger);
+  text-align: center;
+  margin: 0;
+}
+#game-board menu img{
+  position: absolute;
+  top: 15px;
+  right: 100px;
+  width: 40px;
+  filter: grayscale(50%);
+}
+
+#game-board menu button{
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .3rem .8rem;
+  color: var(--color-text-muted);
+  background: var(--color-bg-secondary);
+  border:none;
+  border-radius: 5px;
+}
+
+#game-board menu button:hover{
+  background-color: var(--color-bg-main);
+  color:  var(--color-text);
+  transition: 1s;
+}
+
+#word-space {
   width: 90%;
   display: flex;
   justify-content: center;
@@ -177,17 +300,17 @@ header h1 {
   gap: 0.5rem;
 }
 
-#guess-block .letter-space {
+.letter-space {
   display: inline-block;
   min-width: 40px;
   height: 50px;
   border: 1px solid #f0e9e0;
   text-align: center;
   font-size: 2rem;
-  color: #f0e9e0;
+  color: var(--color-text);
 }
 
-#guess-block #alphabet {
+#alphabet {
   width: 80%;
   margin-top: 2rem;
   display: flex;
@@ -196,24 +319,24 @@ header h1 {
   gap: 0.5rem;
 }
 
-#guess-block #alphabet button {
+#alphabet button {
   width: 32px;
   height: 32px;
   border: none;
   border-radius: 4px;
-  background-color: #f0e9e0;
+  background-color: var(--color-text);
   color: #0b0511;
   font-size: 1rem;
   cursor: pointer;
 }
 
-#guess-block #alphabet button:disabled{
-  background-color: rgb(66, 55, 25);
+#alphabet button:disabled{
+  background-color: var(--color-text-muted);
   cursor: not-allowed;
 }
 
-#guess-block #alphabet button:hover{
-  background-color: #f1ba8abb;
+#alphabet button:hover{
+  background-color: var(--color-primary-hover);
   transform: scale(1.1);
 }
 
@@ -221,52 +344,63 @@ header h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   gap: 2rem;
   width: 80vw;
-  height: 500px;
+  height: 550px;
   margin: 1rem auto;
   border-radius: 8px;
-  box-shadow: 2px 4px 8px black;
-  background-color: rgba(14, 13, 9, 0.658);
-}
-
-#game-over h2{
-  margin-bottom: 0;
-  font-size: 2.5rem;
-  animation: slide-down 2s ease-in-out forwards;
-}
-
-#game-over img{
-  width: 110px;
-  height: auto;
+  box-shadow: var(--shadow-default);
+  background-color:var(--color-bg-card);
 }
 
 #game-over > div {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#game-over h2{
+  margin-bottom: 0;
+  font-size: 2.2rem;
+  animation: slide-down 2s ease-in-out forwards;
+}
+
+#game-over img{
+  width: 100px;
+  height: 280px;
+}
+
+#game-over img.loser{
+  animation: fadeToGray 5s forwards
+}
+
+#game-over .buttons {
+  display: flex;
+  flex-direction: row;
   justify-content: center;
   gap: 2rem;
 }
 
 #game-over button{
   display: block;
-  width: 170px;
-  height: 60px;
-  border: 1px solid #d6953f;
-  font-size: 1.1rem;
+  width: 150px;
+  height: 50px;
+  border: 1px solid var(--color-primary);
+  font-size: 1rem;
   background: none;
-  color: #d6953f;
+  color: var(--color-primary);
   border-radius: 5px;
   margin-bottom: 1rem;
 }
 
 #game-over button:hover{
-  background-color: #d8a665;
+  background-color: var(--color-primary-hover);
   color: #000000;
   font-weight: bold;
   transform: scale(1.1);
   transition-duration: .6s;
-  box-shadow: 1px 1px 5px #85663ebd;
+  box-shadow: var(--shadow-default);
 }
 
 @keyframes slide-down {
@@ -278,6 +412,21 @@ header h1 {
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+@keyframes fadeToGray {
+  from {
+    filter: grayscale(0%);
+  }
+  to {
+    filter: grayscale(100%);
+  }
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 10px var(--color-primary); }
+  50% { box-shadow: 0 0 25px var(--color-primary); }
+  100% { box-shadow: 0 0 10px var(--color-primary); }
 }
 
 

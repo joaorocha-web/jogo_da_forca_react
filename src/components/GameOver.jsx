@@ -1,14 +1,34 @@
-export default function GameOver(winner, onRestart, onExit) {
+import { playSound } from '../utils/sounds';
+export default function GameOver({winner, word, onExit, onRestart}) {
+    let winning = winner !== undefined;
+    
     return <section id="game-over">
-        {winner && <h2>Você Ganhou!</h2>}
-        {!winner && <h2>Você Perdeu!</h2>}
+        {winning && 
+            <div>
+                <h2>Parabéns {winner.name}</h2>
+                <p>Ninguém morreu!</p>
+            </div>
+        }
 
-        {winner && <img src="forca_img_0.PNG"></img>}
-        {!winner && <img src="forca_img_6.PNG"></img>}
+        {!winning && 
+            <div>
+                <h2>Você Perdeu!</h2>
+                <p>A palavra era: {word.word}</p>
+            </div>
+        }
 
-        <div>
-            <button onClick={() => onExit(true)}>Voltar Início</button>
-            <button>Jogar Novamente</button>
+        {winning && <img src="images/forca_img_0.PNG"></img>}
+        {!winning && <img src="images/forca_img_6.PNG" className="loser"></img>}
+
+        <div className="buttons">
+            <button onClick={() => {
+                onExit();
+                playSound('/sounds/botao-forca.mp3', 0.7);
+            }}>Voltar Início</button>
+            <button onClick={() => {
+                onRestart();
+                playSound('/sounds/botao-forca.mp3', 0.7);
+            }}>Jogar Novamente</button>
         </div>
     </section>
 }

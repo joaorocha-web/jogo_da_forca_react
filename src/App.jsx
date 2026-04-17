@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { PORTUGUESE_WORDS_EASY, PORTUGUESE_WORDS_MEDIUM, PORTUGUESE_WORDS_HARD } from './Words';
 import { ENGLISH_WORDS_EASY, ENGLISH_WORDS_MEDIUM, ENGLISH_WORDS_HARD} from './Words';
 
@@ -19,6 +19,24 @@ const WORDS = {
   }
 };
 
+const GAME_STATUS = {
+  CONFIG: 'config',
+  STARTED: 'started',
+  FINISHED: 'finished'
+};
+
+const GAME_SONGS = {
+  DEFAULT: 'sounds/bg-forca.mp3',
+  GAME_OVER: 'sounds/game-over-forca.mp3'
+};
+
+const defaultConfig = {
+  name: 'João Victor',
+  language: 'pt',
+  difficulty: 'easy',
+  sound: true
+};
+
 function getRandomWord({ language, difficulty }) {
   const idiom = language === 'pt' ? 'PORTUGUESE' : 'ENGLISH';
 
@@ -33,19 +51,18 @@ function getRandomWord({ language, difficulty }) {
   return source[randomIndex];
 }
 
-let winner;
-
 function App() {
-  const [gameConfig, setGameConfig] = useState({
-    name: '',
-    language: 'pt',
-    difficulty: 'easy'
-  });
-  const [gameStarted, setGameStarted] = useState(false);
-  const [gameFinished, setGameFinished] = useState(false);
-  const word = getRandomWord(gameConfig);
-  
+  const audioRef = useRef();
+  const [backgroundSong, setBackgroundSong] = useState(GAME_SONGS.DEFAULT)
+  const [winner, setWinner] = useState();
+  const [word, setWord] = useState();
+  const [gameConfig, setGameConfig] = useState(defaultConfig);
+  const [gameStatus, setGameStatus] = useState(GAME_STATUS.CONFIG);
 
+  const isConfiguring = gameStatus === GAME_STATUS.CONFIG;
+  const isStarted = gameStatus === GAME_STATUS.STARTED;
+  const isFinished = gameStatus === GAME_STATUS.FINISHED;
+  
   function handleOnChange(option, value){
     setGameConfig(prev => {
       return {
@@ -54,25 +71,59 @@ function App() {
     })
   }
 
-  function handleStartGame(restart = false){
-    if(restart === true){
-      setGameStarted(false);
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    audioRef.current.pause();
+    audioRef.current.load(); 
+  }, [backgroundSong]);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    if (gameConfig.sound) {
+      audioRef.current.volume = 0.3;
+      audioRef.current.play().catch(() => {});
+    } else {
+      audioRef.current.pause();
     }
-    console.log(restart);
-    setGameStarted(true);
-  }
+  }, [gameConfig.sound, gameStatus]);
 
+  useEffect(() => {
+    if (gameConfig.language === 'eng') {
+      document.documentElement.setAttribute('data-theme', 'american');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  }, [gameConfig.language]);
+
+  function handleStartGame(){
+    setWord(getRandomWord(gameConfig));
+    setWinner(undefined);
+    setGameStatus(GAME_STATUS.STARTED);
+    setBackgroundSong(GAME_SONGS.DEFAULT);
+  }
+  
   function handleFinishGame(isWinner = false) {
-    setGameFinished(true);
-
-    winner = isWinner ? {name:gameConfig.name} : undefined;
+    setGameStatus(GAME_STATUS.FINISHED);
+    setWinner(isWinner ? {name: gameConfig.name} : undefined);
+    setBackgroundSong(GAME_SONGS.GAME_OVER)
   }
-
+  
+ function handleExitGame(){
+    setGameStatus(GAME_STATUS.CONFIG);
+    setWord(undefined);
+    setWinner(undefined);
+    setBackgroundSong(GAME_SONGS.DEFAULT)
+  }
   
   return <main>
-      {!gameStarted && <GameConfig onConfigOption={handleOnChange} onClick={handleStartGame}/>}
-      {(gameStarted && !gameFinished) &&<GameBoard  word={word} onFinishGame={handleFinishGame}/>}
-      {gameFinished && <GameOver onExit={handleStartGame} winner={winner}/>}
+      {isConfiguring && <GameConfig onConfigOption={handleOnChange} onClick={handleStartGame} config={gameConfig}/>}
+      {isStarted &&<GameBoard config={gameConfig}  word={word} onFinishGame={handleFinishGame} onExit={handleExitGame}/>}
+      {isFinished && <GameOver onExit={handleExitGame} onRestart={handleStartGame} winner={winner} word={word}/>}
+      <audio ref={audioRef} loop>
+        <source src={backgroundSong} type="audio/mpeg"/>
+      </audio>
   </main>
 }
 
