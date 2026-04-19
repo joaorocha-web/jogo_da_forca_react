@@ -117,7 +117,7 @@ header h1 {
 #game-config .avatar{
   width: 180px;
   height: 320px;
-  background-image: url('images/forca_img_6.PNG');
+  background-image: url('/images/forca_img_6.PNG');
   background-size: cover;
   transition: all 0.8s ease;
   transform-origin: center;

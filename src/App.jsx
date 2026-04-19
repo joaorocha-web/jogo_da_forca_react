@@ -27,7 +27,8 @@ const GAME_STATUS = {
 
 const GAME_SONGS = {
   DEFAULT: 'sounds/bg-forca.mp3',
-  GAME_OVER: 'sounds/game-over-forca.mp3'
+  GAME_OVER: 'sounds/game-over-forca.mp3',
+  GAME_VICTORY: 'sounds/vitoria-forca.mp3'
 };
 
 const defaultConfig = {
@@ -107,7 +108,7 @@ function App() {
   function handleFinishGame(isWinner = false) {
     setGameStatus(GAME_STATUS.FINISHED);
     setWinner(isWinner ? {name: gameConfig.name} : undefined);
-    setBackgroundSong(GAME_SONGS.GAME_OVER)
+    setBackgroundSong(isWinner ? GAME_SONGS.GAME_VICTORY : GAME_SONGS.GAME_OVER)
   }
   
  function handleExitGame(){

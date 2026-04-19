@@ -43,6 +43,7 @@ function stopSuspense() {
             playSound('/sounds/botao-certo-forca.wav', 0.9);
             if(newCorrectLetters.length === uniqueLetters.length){
                 onFinishGame(true);
+                stopSuspense();
             }
 
         }else{
